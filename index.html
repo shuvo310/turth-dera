@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ট্রুথ অ্যান্ড ডেয়ার - শুভ'র তৈরি</title>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/> <!-- Animate.css for animations -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header class="animate__animated animate__fadeInDown">
+            <h1>ট্রুথ অ্যান্ড ডেয়ার</h1>
+            <p class="subtitle">বন্ধুদের সাথে জমজমাট খেলা!</p>
+        </header>
+
+        <!-- Player Setup Section -->
+        <section id="player-setup-section" class="game-section active animate__animated animate__fadeInUp">
+            <h2>খেলোয়াড় সেটআপ</h2>
+            <div class="form-group">
+                <label for="player-count">খেলোয়াড়ের সংখ্যা (২-৮):</label>
+                <input type="number" id="player-count" min="2" max="8" value="2">
+            </div>
+            <button id="set-player-count-btn" class="btn btn-primary">নাম লিখুন</button>
+            
+            <div id="player-names-input-area" class="form-group-container">
+                <!-- Player name input fields will be generated here -->
+            </div>
+            <button id="start-game-btn" class="btn btn-success" style="display:none;">গেম শুরু করুন</button>
+        </section>
+
+        <!-- Game Board Section -->
+        <section id="game-board-section" class="game-section">
+            <div class="game-info">
+                <p>এখন <strong id="turn-player-name">খেলোয়াড়</strong> এর পালা</p>
+            </div>
+            <div class="wheel-container">
+                <div id="wheel">
+                    <!-- Segments will be drawn here by JS -->
+                </div>
+                <div id="pointer-container">
+                    <div id="pointer"></div>
+                </div>
+                <button id="spin-center-btn" class="spin-center-button">স্পিন!</button>
+            </div>
+        </section>
+
+        <!-- Modal for Truth/Dare Choice and Display -->
+        <div id="action-modal" class="modal-overlay">
+            <div class="modal-content animate__animated"> <!-- Animation class will be added by JS -->
+                <span class="close-modal-btn">×</span>
+                <div id="modal-choice-step">
+                    <h2><span id="modal-selected-player-name">খেলোয়াড়</span>, তোমার পছন্দ:</h2>
+                    <p>তুমি কি <strong class="truth-text">সত্য</strong> বাছবে নাকি <strong class="dare-text">চ্যালেঞ্জ</strong>?</p>
+                    <div class="modal-buttons">
+                        <button id="modal-truth-btn" class="btn btn-truth">সত্য</button>
+                        <button id="modal-dare-btn" class="btn btn-dare">চ্যালেঞ্জ</button>
+                    </div>
+                </div>
+                <div id="modal-action-display-step" style="display:none;">
+                    <h3 id="modal-action-type"></h3>
+                    <p id="modal-action-text"></p>
+                    <button id="modal-next-turn-btn" class="btn btn-primary">পরবর্তী পালা</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="developer-credit animate__animated animate__fadeInUp animate__delay-1s">
+        <p>এই মজার গেমটি তৈরি করেছেন <a href="https://shuvo310.github.io/Shuvo-Das/" target="_blank" rel="noopener noreferrer">shuvo</a> </p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

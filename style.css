@@ -1,0 +1,349 @@
+:root {
+    --primary-color: #6a11cb;
+    --secondary-color: #2575fc;
+    --accent-color: #fbc531;
+    --truth-color: #3c40c6;
+    --dare-color: #f53b57;
+    --light-bg: #f5f6fa;
+    --dark-text: #2f3542;
+    --border-color: #dfe4ea;
+    --font-main: 'Poppins', 'Hind Siliguri', sans-serif;
+    --font-bn: 'Hind Siliguri', sans-serif;
+    --shadow-sm: 0 3px 6px rgba(0,0,0,0.08);
+    --shadow-md: 0 5px 15px rgba(0,0,0,0.12);
+    --wheel-size: 320px;
+    --center-button-size: 80px;
+    --pointer-length: calc(var(--wheel-size) / 2 - 12px); /* Pointer length relative to wheel radius */
+    --pointer-width: 12px;
+}
+
+body {
+    font-family: var(--font-bn);
+    background-image: linear-gradient(135deg, #fdfcfb 0%, #e2d1c3 100%);
+    color: var(--dark-text);
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    box-sizing: border-box;
+    line-height: 1.7;
+    overflow-x: hidden;
+}
+
+.container {
+    background-color: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(5px);
+    width: 100%;
+    max-width: 550px;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: var(--shadow-md);
+    text-align: center;
+    border: 1px solid rgba(255,255,255,0.2);
+}
+
+header {
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid var(--border-color);
+}
+header h1 {
+    font-family: var(--font-main);
+    background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-size: 2.4em;
+    font-weight: 700;
+    margin: 0 0 5px 0;
+}
+.subtitle { font-size: 1em; color: #57606f; }
+
+.game-section { display: none; padding: 15px 0; }
+.game-section.active { display: block; }
+
+.form-group { margin-bottom: 18px; text-align: left; }
+.form-group label { display: block; margin-bottom: 6px; font-weight: 600; color: #485460; font-size: 0.95em; }
+.form-group input[type="number"], .form-group input[type="text"] {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    font-size: 0.95em;
+    font-family: var(--font-bn);
+    box-sizing: border-box;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+.form-group input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(106, 17, 203, 0.15);
+    outline: none;
+}
+.form-group-container { margin-top: 15px; }
+
+.btn {
+    padding: 10px 24px;
+    font-size: 1em;
+    font-weight: 600;
+    font-family: var(--font-main);
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.25s ease-out;
+    margin: 8px 4px;
+    text-transform: capitalize;
+    letter-spacing: 0.5px;
+    box-shadow: var(--shadow-sm);
+}
+.btn:hover:not(:disabled) { transform: translateY(-2px) scale(1.01); box-shadow: var(--shadow-md); }
+.btn:active:not(:disabled) { transform: translateY(-1px) scale(1); }
+.btn:disabled {
+    background-color: #bdc3c7 !important;
+    color: #7f8c8d !important;
+    cursor: not-allowed !important;
+    box-shadow: none !important;
+    transform: none !important;
+}
+
+.btn-primary { background-image: linear-gradient(45deg, var(--primary-color) 0%, var(--secondary-color) 100%); color: white; }
+.btn-primary:hover:not(:disabled) { background-image: linear-gradient(45deg, var(--secondary-color) 0%, var(--primary-color) 100%); }
+.btn-success { background-color: #2ecc71; color: white; }
+.btn-success:hover:not(:disabled) { background-color: #27ae60; }
+.btn-truth { background-color: var(--truth-color); color: white; }
+.btn-truth:hover:not(:disabled) { background-color: #2c34a0; }
+.btn-dare { background-color: var(--dare-color); color: white; }
+.btn-dare:hover:not(:disabled) { background-color: #c23616; }
+
+.game-info { margin-bottom: 20px; font-size: 1.1em; }
+.game-info strong { color: var(--primary-color); font-weight: 700; }
+
+.wheel-container {
+    position: relative;
+    width: var(--wheel-size);
+    height: var(--wheel-size);
+    margin: 30px auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#wheel {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    position: relative;
+    background-color: #e0e0e0; /* Fallback for gradient if not supported */
+    /* background-image: radial-gradient(circle, #f0f0f0 20%, #dddddd 100%); */
+    box-shadow: 0 0 20px rgba(0,0,0,0.1) inset, 0 6px 12px rgba(0,0,0,0.15);
+    overflow: hidden; /* Essential for clip-path to work on segments */
+    border: 4px solid white; /* White border around the wheel */
+}
+
+.segment {
+    position: absolute;
+    /* width and height will be set to 50.5% and 100.5% by JS to ensure coverage */
+    /* top and left will be set to -0.25% and 50% by JS for proper origin */
+    transform-origin: 0% 50%; /* Left-center origin for rotation */
+    display: flex; /* For aligning text if needed, though text is separate */
+    justify-content: center;
+    align-items: center;
+    z-index: 1;
+}
+
+.segment-text {
+    position: absolute;
+    font-family: 'Hind Siliguri', Arial, sans-serif;
+    font-weight: 600;
+    /* ফন্ট সাইজ JS দ্বারা সেট হবে */
+    padding: 4px 6px; /* প্যাডিং সামান্য বাড়ানো হলো */
+    border-radius: 4px; /* বর্ডার রেডিয়াস সামান্য বাড়ানো হলো */
+    background-color: rgba(255, 255, 255, 0.95); /* প্রায় সম্পূর্ণ সাদা, হালকা স্বচ্ছ الخلفية */
+    color: #2c3e50; /* গাঢ় নীল-ধূসর টেক্সট রঙ, প্রায় সব الخلفيةতে ভালো দেখাবে */
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    text-align: center;
+    transform-origin: center center; /* Text rotates around its own center */
+    transition: transform 0.2s ease-out, box-shadow 0.2s ease-out, background-color 0.2s ease-out;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.15), 0 0 0 1px rgba(0,0,0,0.05); /* হালকা বর্ডার এবং শ্যাডো */
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(0,0,0,0.1); /* খুবই হালকা বর্ডার টেক্সট বক্সের জন্য */
+}
+.segment-text.selected {
+    background-color: var(--accent-color);
+    color: #111 !important; /* Ensure high contrast on accent color */
+    box-shadow: 0 0 12px var(--accent-color), 0 0 0 2px white, 0 2px 5px rgba(0,0,0,0.3); /* আরও স্পষ্ট শ্যাডো */
+    font-weight: 700;
+    z-index: 5;
+    /* transform scale will be handled by JS */
+}
+
+#pointer-container {
+    position: absolute;
+    width: 100%; height: 100%;
+    top: 0; left: 0;
+    z-index: 10; /* Above wheel segments, below center button */
+    transition: transform 5s cubic-bezier(0.22, 1, 0.36, 1); /* Spin animation for the pointer's container */
+    pointer-events: none; /* Allows clicks to pass through to center button */
+}
+#pointer {
+    width: var(--pointer-width);
+    height: var(--pointer-length);
+    background: linear-gradient(to bottom, #c0392b, #e74c3c); /* Red gradient for pointer */
+    position: absolute;
+    top: calc(50% - var(--pointer-length)); /* Positions pointer from center upwards */
+    left: 50%;
+    transform-origin: bottom center; /* Pointer pivots from its base */
+    transform: translateX(-50%); /* Center the pointer horizontally */
+    border-radius: calc(var(--pointer-width) / 2) calc(var(--pointer-width) / 2) 0 0; /* Rounded top */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+    border-left: 1px solid rgba(0,0,0,0.1);
+    border-right: 1px solid rgba(0,0,0,0.1);
+}
+#pointer::after { /* Small triangle tip for the pointer */
+    content: '';
+    position: absolute;
+    top: -6px; /* Position tip above the main pointer body */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0; height: 0;
+    border-left: calc(var(--pointer-width) / 2 + 1px) solid transparent;
+    border-right: calc(var(--pointer-width) / 2 + 1px) solid transparent;
+    border-bottom: 8px solid #c0392b; /* Matches pointer's top color */
+}
+
+.spin-center-button {
+    position: absolute;
+    width: var(--center-button-size);
+    height: var(--center-button-size);
+    border-radius: 50%;
+    background-image: linear-gradient(45deg, var(--accent-color) 0%, #f39c12 100%);
+    color: #333; /* Dark text for good contrast on yellow */
+    font-size: 1.2em;
+    font-weight: 700;
+    font-family: var(--font-main);
+    border: 3px solid white;
+    box-shadow: 0 0 15px rgba(0,0,0,0.15), 0 0 10px rgba(251, 197, 49, 0.4) inset;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 15; /* Highest z-index to be on top */
+    padding: 0;
+    transition: all 0.2s ease-out;
+    text-shadow: 0 1px 1px rgba(255,255,255,0.2);
+}
+.spin-center-button:hover:not(:disabled) {
+    background-image: linear-gradient(45deg, #f39c12 0%, var(--accent-color) 100%);
+    transform: scale(1.03);
+    box-shadow: 0 0 20px rgba(0,0,0,0.2), 0 0 12px rgba(243, 156, 18, 0.5) inset;
+}
+.spin-center-button:active:not(:disabled) { transform: scale(0.98); }
+
+/* Modal Styles */
+.modal-overlay {
+    display: none; /* Hidden by default, shown by JS */
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background-color: rgba(45, 52, 54,0.85); /* Dark semi-transparent overlay */
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+    padding: 15px;
+    box-sizing: border-box;
+}
+.modal-content {
+    background-color: white;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    width: 100%;
+    max-width: 450px;
+    text-align: center;
+    position: relative;
+    /* Animation classes will be added by JS */
+}
+.close-modal-btn {
+    position: absolute;
+    top: 10px; right: 15px;
+    font-size: 1.8em;
+    font-weight: bold;
+    color: #b2bec3; /* Light grey close button */
+    cursor: pointer;
+    line-height: 1;
+    transition: color 0.2s ease;
+}
+.close-modal-btn:hover { color: var(--dark-text); }
+
+#modal-choice-step h2 { font-size: 1.4em; margin-bottom: 10px; font-weight: 600; }
+#modal-choice-step p { font-size: 1.1em; margin-bottom: 20px; color: #57606f; }
+.truth-text { color: var(--truth-color); font-weight: 700; }
+.dare-text { color: var(--dare-color); font-weight: 700; }
+
+#modal-action-display-step h3 { font-size: 1.3em; margin-bottom: 12px; font-weight: 600; }
+#modal-action-display-step p {
+    font-size: 1.15em;
+    background-color: var(--light-bg);
+    border: 1px solid var(--border-color);
+    padding: 15px;
+    border-radius: 6px;
+    min-height: 70px;
+    margin: 15px 0;
+    line-height: 1.7;
+    color: var(--dark-text);
+    box-shadow: var(--shadow-sm) inset;
+}
+.modal-buttons { margin-top: 15px; display: flex; justify-content: space-around; }
+.modal-buttons .btn { flex-grow: 1; margin: 0 6px; }
+
+/* Footer */
+.developer-credit {
+    margin-top: 25px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border-color);
+    text-align: center;
+    font-size: 0.85em;
+    color: #7f8c8d;
+}
+.developer-credit p { margin: 0; }
+.developer-credit a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.2s ease;
+}
+.developer-credit a:hover { color: var(--secondary-color); text-decoration: underline; }
+
+/* Responsive Adjustments */
+@media (max-width: 600px) {
+    body { padding: 10px; }
+    .container { padding: 15px; max-width: 95%;}
+    header h1 { font-size: 2em; }
+    .subtitle { font-size: 0.9em; }
+
+    :root { /* Override root variables for smaller screens */
+        --wheel-size: 280px;
+        --center-button-size: 70px;
+        --pointer-length: calc(var(--wheel-size) / 2 - 10px);
+        --pointer-width: 10px;
+    }
+
+    .segment-text {
+        padding: 2px 4px; /* Smaller padding for smaller text boxes */
+        /* Font size will be adjusted by JS based on wheel size */
+    }
+
+    .spin-center-button { font-size: 1.1em; }
+
+    .modal-content { padding: 20px; }
+    #modal-choice-step h2 { font-size: 1.2em; }
+    #modal-action-display-step h3 { font-size: 1.15em; }
+    #modal-action-display-step p { font-size: 1em; min-height: 60px; }
+
+    .developer-credit { font-size: 0.8em; }
+}
